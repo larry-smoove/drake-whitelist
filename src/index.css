@@ -82,8 +82,8 @@
       text-decoration: none; color: var(--text);
     }
     .logo-mark {
-  width: 30px;
-  height: 30px;
+  width: 120px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,8 +92,8 @@
 }
 
 .logo-mark img {
-  width: 30px;
-  height: 30px;
+  width: 120px;
+  height: 40px;
   display: block;
   object-fit: contain;
 }
