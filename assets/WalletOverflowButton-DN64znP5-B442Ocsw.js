@@ -1,1 +1,0 @@
-import{Lo as e,bn as t,fn as n,hn as r}from"./index-mAOZwWWo.js";import{t as i}from"./wallet-DLE2lkDi.js";var a=e(),o=({onClick:e,text:o})=>(0,a.jsxs)(t,{onClick:e,children:[(0,a.jsx)(n,{children:(0,a.jsx)(i,{})}),(0,a.jsx)(r,{children:o})]});export{o as t};

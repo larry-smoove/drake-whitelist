@@ -1,0 +1,14 @@
+import{Ai as e,Cn as t,Lo as n,Mn as r,Pi as i,Vi as a,Vo as o,ei as s,hn as c,wi as l,zo as u}from"./index-_7AQX_zd.js";import{l as d,r as f,s as p}from"./ModalHeader-YJ2uCOoj-2zAC8_OP.js";import{t as m}from"./ExclamationTriangleIcon-ByKBCtos.js";import{t as h}from"./LockClosedIcon-Cpd5YW_C.js";import{t as g}from"./Subtitle-CV-2yKE4-C1Jqi9wV.js";import{t as _}from"./Title-BnzYV3Is-OaJ5thAt.js";var v=n(),y=o(u(),1);s();var b=t.div`
+  && {
+    border-width: 4px;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  aspect-ratio: 1;
+  border-style: solid;
+  border-color: ${e=>e.$color??`var(--privy-color-accent)`};
+  border-radius: 50%;
+`,x={component:()=>{let{user:t}=i(),{client:n,walletProxy:o,refreshSessionAndUser:s,closePrivyModal:u}=a(),x=r(),{entropyId:S,entropyIdVerifier:C}=x.data?.recoverWallet??{},[w,T]=(0,y.useState)(!1),[E,D]=(0,y.useState)(null),[O,k]=(0,y.useState)(null);function A(){if(!w){if(O)return x.data?.setWalletPassword?.onFailure(O),void u();if(!E)return x.data?.setWalletPassword?.onFailure(Error(`User exited set recovery flow`)),void u()}}return x.onUserCloseViaDialogOrKeybindRef.current=A,(0,v.jsxs)(v.Fragment,O?{children:[(0,v.jsx)(f,{onClose:A},`header`),(0,v.jsx)(b,{$color:`var(--privy-color-error)`,style:{alignSelf:`center`},children:(0,v.jsx)(m,{height:38,width:38,stroke:`var(--privy-color-error)`})}),(0,v.jsx)(_,{style:{marginTop:`0.5rem`},children:`Something went wrong`}),(0,v.jsx)(c,{style:{minHeight:`2rem`}}),(0,v.jsx)(p,{onClick:()=>k(null),children:`Try again`}),(0,v.jsx)(d,{})]}:{children:[(0,v.jsx)(f,{onClose:A},`header`),(0,v.jsx)(h,{style:{width:`3rem`,height:`3rem`,alignSelf:`center`}}),(0,v.jsx)(_,{style:{marginTop:`0.5rem`},children:`Automatically secure your account`}),(0,v.jsx)(g,{style:{marginTop:`1rem`},children:`When you log into a new device, you’ll only need to authenticate to access your account. Never get logged out if you forget your password.`}),(0,v.jsx)(c,{style:{minHeight:`2rem`}}),(0,v.jsx)(p,{loading:w,disabled:!(!w&&!E),onClick:()=>async function(){T(!0);try{let r=await n.getAccessToken(),i=e(t,S);if(!r||!o||!i)return;if(!(await o.setRecovery({accessToken:r,entropyId:S,entropyIdVerifier:C,existingRecoveryMethod:i.recoveryMethod,recoveryMethod:`privy`})).entropyId)throw Error(`Unable to set recovery on wallet`);let a=await s();if(!a)throw Error(`Unable to set recovery on wallet`);let c=e(a,i.address);if(!c)throw Error(`Unabled to set recovery on wallet`);D(!!a),setTimeout((()=>{x.data?.setWalletPassword?.onSuccess(c),u()}),l)}catch(e){k(e)}finally{T(!1)}}(),children:E?`Success`:`Confirm`}),(0,v.jsx)(d,{})]})}};export{x as SetAutomaticRecoveryScreen,x as default};
