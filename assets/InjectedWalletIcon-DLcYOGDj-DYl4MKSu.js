@@ -1,1 +1,0 @@
-import{Lo as e}from"./index-DUTx7U0L.js";import{t}from"./WalletIcon-1Ar8vz-U.js";var n=e(),r=({icon:e,name:r})=>typeof e==`string`?(0,n.jsx)(`img`,{alt:`${r||`wallet`} logo`,src:e,style:{height:24,width:24,borderRadius:4}}):e===void 0?(0,n.jsx)(t,{style:{height:24,width:24}}):e?(0,n.jsx)(e,{style:{height:24,width:24}}):null;export{r as t};
