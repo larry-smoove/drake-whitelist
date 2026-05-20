@@ -2,9 +2,9 @@ import { usePrivy } from '@privy-io/react-auth';
 import { useState } from 'react';
 import './index.css';
 
-const AIRTABLE_PAT   = 'patDrYPVL9bpqr0zc.ef507655bbec1a7b0f0594b55de2b973e5fe2e0f482170fd8df1bd24c7ce16d6';
-const AIRTABLE_BASE  = 'appZhD6gB3cs1Ljmt/tblzmejpaAd3Bu81W/viwpiunFNNTs9EONU';
-const AIRTABLE_TABLE = 'Whitelist';
+const AIRTABLE_PAT = import.meta.env.VITE_AIRTABLE_API_KEY;
+const AIRTABLE_BASE = import.meta.env.VITE_AIRTABLE_BASE;
+const AIRTABLE_TABLE = import.meta.env.VITE_AIRTABLE_TABLE;
 
 export default function App() {
   const {
