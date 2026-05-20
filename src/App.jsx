@@ -144,10 +144,10 @@ export default function App() {
           <span className="logo-name">Drake</span>
         </a>
         <nav className="header-links">
-          <a href="#" className="header-link">Trade</a>
-          <a href="#" className="header-link">Earn</a>
-          <a href="#" className="header-link">Portfolio</a>
-          <a href="#" className="header-link">Leaderboard</a>
+          <a href="https://drake.exchange/trade" className="header-link">Trade</a>
+          <a href="https://drake.exchange/earn" className="header-link">Earn</a>
+          <a href="https://drake.exchange/portfolio" className="header-link">Portfolio</a>
+          <a href="https://drake.exchange/leaderboard" className="header-link">Leaderboard</a>
         </nav>
         <button className="header-cta" onClick={login}>
           {authenticated ? 'Connected' : 'Connect Wallet'}
