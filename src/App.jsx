@@ -143,7 +143,6 @@ export default function App() {
          <div className="logo-mark">
   <img src="https://drake.exchange/assets/icon_website_logo_v4_l-298e1892.svg" alt="Drake" />
 </div>
-          <span className="logo-name">Drake</span>
         </a>
         <nav className="header-links">
           <a href="https://drake.exchange/trade" className="header-link">Trade</a>
