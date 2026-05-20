@@ -140,7 +140,9 @@ export default function App() {
       {/* Header */}
       <header className="app-header">
         <a href="/" className="app-logo">
-          <div className="logo-mark">{/* your SVG */}</div>
+         <div className="logo-mark">
+  <img src="https://drake.exchange/assets/icon_website_logo_v4_l-298e1892.svg" alt="Drake" />
+</div>
           <span className="logo-name">Drake</span>
         </a>
         <nav className="header-links">
