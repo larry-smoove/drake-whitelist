@@ -1,0 +1,1 @@
+import{Lo as e,bn as t,fn as n,hn as r}from"./index-CHU___CG.js";import{t as i}from"./wallet-DRL02etl.js";var a=e(),o=({onClick:e,text:o})=>(0,a.jsxs)(t,{onClick:e,children:[(0,a.jsx)(n,{children:(0,a.jsx)(i,{})}),(0,a.jsx)(r,{children:o})]});export{o as t};
