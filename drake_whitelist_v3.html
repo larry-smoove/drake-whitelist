@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drake — Request Whitelist Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:      #7c3aed;
+      --purple-mid:  #6d28d9;
+      --purple-50:   #ede9fe;
+      --purple-100:  #ddd6fe;
+      --purple-ring: rgba(124, 58, 237, 0.18);
+      --blue:        #2563eb;
+      --blue-hover:  #1d4ed8;
+      --green:       #2563eb;
+      --green-hover: #1d4ed8;
+      --green-50:    rgba(37, 99, 235, 0.06);
+      --green-ring:  rgba(37, 99, 235, 0.2);
+      --text:        #111827;
+      --text-2:      #6b7280;
+      --text-3:      #9ca3af;
+      --bg:          #ffffff;
+      --bg-2:        #f9fafb;
+      --bg-3:        #f3f4f6;
+      --border:      #e5e7eb;
+      --border-2:    #d1d5db;
+      --font:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-sm:   6px;
+      --radius:      8px;
+      --radius-lg:   12px;
+      --radius-xl:   16px;
+      --shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
+      --shadow:      0 1px 3px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.06);
+      --shadow-lg:   0 4px 6px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.10);
+    }
+
+    html { font-size: 14px; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Notification Banner ─── */
+    .notif-banner {
+      background: linear-gradient(90deg, #5b21b6 0%, #7c3aed 50%, #6366f1 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 48px;
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .notif-banner .notif-icon { margin-right: 7px; font-size: 13px; }
+    .notif-close {
+      position: absolute; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1;
+      padding: 2px 4px;
+      transition: color 0.15s;
+    }
+    .notif-close:hover { color: #fff; }
+
+    /* ─── Header ─── */
+    .app-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+    .app-logo {
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none; color: var(--text);
+    }
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: linear-gradient(135deg, #1e3a5f 0%, #1e3a5f 100%);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-mark svg { width: 18px; height: 18px; }
+    .logo-name {
+      font-size: 16px; font-weight: 700;
+      letter-spacing: -0.3px; color: var(--text);
+    }
+    .header-links {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .header-link {
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      text-decoration: none; padding: 6px 10px; border-radius: var(--radius-sm);
+      transition: color 0.15s, background 0.15s;
+    }
+    .header-link:hover { color: var(--text); background: var(--bg-3); }
+    .header-cta {
+      margin-left: 8px;
+      padding: 7px 16px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.01em;
+      transition: background 0.15s;
+    }
+    .header-cta:hover { background: var(--blue-hover); }
+
+    /* ─── Page Body ─── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 16px 64px;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,58,237,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(37,99,235,0.06) 0%, transparent 60%),
+        linear-gradient(160deg, #f5f3ff 0%, #f9fafb 40%, #eff6ff 100%);
+    }
+
+    /* ─── Page Header ─── */
+    .page-eyebrow {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .eyebrow-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--purple-50); color: var(--purple);
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--purple-100);
+    }
+    .eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--purple); flex-shrink: 0;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .page-title {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+      color: var(--text); text-align: center; margin-bottom: 8px;
+    }
+    .page-sub {
+      font-size: 14px; color: var(--text-2); text-align: center;
+      line-height: 1.6; max-width: 380px; margin-bottom: 32px;
+    }
+
+    /* ─── Form Card ─── */
+    .form-card {
+      width: 100%; max-width: 460px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* ─── Tab Nav ─── */
+    .tab-nav {
+      display: flex;
+      background: var(--bg-3);
+      padding: 4px;
+      gap: 3px;
+      margin: 20px 20px 0;
+      border-radius: var(--radius);
+    }
+    .tab-btn {
+      flex: 1; padding: 7px 12px;
+      border: none; border-radius: var(--radius-sm);
+      background: none; cursor: pointer;
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      color: var(--text-2);
+      transition: all 0.15s ease;
+      letter-spacing: 0.01em;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      background: var(--bg); color: var(--text);
+      box-shadow: var(--shadow-sm), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+    .tab-step {
+      display: inline-block;
+      width: 16px; height: 16px; line-height: 16px;
+      border-radius: 50%; text-align: center;
+      font-size: 10px; font-weight: 700;
+      background: var(--bg-3); color: var(--text-3);
+      margin-right: 5px;
+      transition: all 0.15s;
+    }
+    .tab-btn.active .tab-step {
+      background: var(--blue); color: #fff;
+    }
+    .tab-btn.done .tab-step {
+      background: var(--green); color: #fff;
+    }
+    .tab-btn.done .tab-step::after { content: '✓'; }
+
+    /* ─── Tab Panels ─── */
+    .tab-panel { display: none; padding: 20px 20px 0; }
+    .tab-panel.active { display: block; }
+
+    /* ─── Section Label ─── */
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 14px;
+    }
+
+    /* ─── Field ─── */
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label {
+      display: block; font-size: 12.5px; font-weight: 500;
+      color: var(--text); margin-bottom: 5px; letter-spacing: 0.01em;
+    }
+    .field-label .opt {
+      font-weight: 400; color: var(--text-3); font-size: 11.5px; margin-left: 4px;
+    }
+    .field-input {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg); color: var(--text);
+      font-family: var(--font); font-size: 13.5px;
+      outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .field-input::placeholder { color: var(--text-3); }
+    .field-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--green-ring);
+    }
+    .field-hint {
+      margin-top: 4px; font-size: 11.5px; color: var(--text-3); letter-spacing: 0.01em;
+    }
+
+    /* ─── Connect Buttons ─── */
+    .connect-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg); cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    .connect-btn:hover {
+      border-color: var(--blue);
+      background: var(--bg-2);
+    }
+    .connect-btn.connected {
+      border-color: var(--green);
+      background: var(--green-50);
+    }
+    .connect-btn.connected:hover { background: var(--green-50); }
+    .cb-left { display: flex; align-items: center; gap: 9px; }
+    .cb-icon {
+      width: 26px; height: 26px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-3); flex-shrink: 0;
+      font-size: 13px;
+    }
+    .connect-btn.connected .cb-icon {
+      background: var(--green-50); color: var(--green);
+    }
+    .cb-label {
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      color: var(--text); letter-spacing: 0.01em; text-align: left;
+    }
+    .cb-sub {
+      font-size: 11.5px; color: var(--text-3); letter-spacing: 0.01em;
+    }
+    .connect-btn.connected .cb-sub { color: var(--green); }
+    .cb-badge {
+      font-size: 11.5px; font-weight: 500; color: var(--text-3);
+      padding: 3px 8px; border-radius: 999px;
+      background: var(--bg-3); letter-spacing: 0.01em;
+      transition: all 0.15s; flex-shrink: 0;
+    }
+    .connect-btn.connected .cb-badge {
+      background: var(--green-50); color: var(--green);
+    }
+
+    /* ─── Divider ─── */
+    .divider {
+      height: 1px; background: var(--border); margin: 16px 0;
+    }
+
+    /* ─── Form Nav ─── */
+    .form-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 20px; margin-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .nav-meta { font-size: 12px; color: var(--text-3); }
+    .nav-btns { display: flex; gap: 8px; }
+    .nav-back {
+      padding: 8px 16px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg); color: var(--text-2);
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s; letter-spacing: 0.01em;
+    }
+    .nav-back:hover { border-color: var(--border-2); color: var(--text); background: var(--bg-2); }
+    .nav-next {
+      padding: 8px 20px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: var(--radius);
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s; letter-spacing: 0.01em;
+    }
+    .nav-next:hover { background: var(--blue-hover); }
+
+    /* ─── Submit Button ─── */
+    .submit-btn {
+      width: 100%; padding: 12px;
+      background: var(--green); color: #fff;
+      border: none; border-radius: var(--radius);
+      font-family: var(--font); font-size: 14px; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.01em;
+      transition: background 0.15s, box-shadow 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .submit-btn:hover {
+      background: var(--green-hover);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+    }
+    .submit-btn:active { transform: translateY(1px); }
+
+    /* ─── Progress Bar ─── */
+    .progress-wrap {
+      padding: 0 20px 20px;
+    }
+    .progress-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 6px;
+    }
+    .progress-label { font-size: 11.5px; color: var(--text-3); }
+    .progress-pct   { font-size: 11.5px; color: var(--purple); font-weight: 600; }
+    .progress-track {
+      height: 3px; background: var(--bg-3); border-radius: 999px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple-mid), var(--purple));
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* ─── Confirm Tab ─── */
+    .confirm-info {
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 14px;
+      display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px;
+    }
+    .confirm-info-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .confirm-info p { font-size: 12.5px; color: var(--text-2); line-height: 1.55; }
+    .confirm-info strong { color: var(--text); font-weight: 600; }
+
+    /* ─── Success Modal ─── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(17,24,39,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--bg); border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,0.06);
+      width: 100%; max-width: 380px; padding: 32px 28px;
+      text-align: center;
+      animation: slideUp 0.2s ease-out;
+    }
+    @keyframes slideUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-check {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--green-50); margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid rgba(5, 150, 105, 0.2);
+    }
+    .modal-check svg { width: 24px; height: 24px; color: var(--green); }
+    .modal-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .modal-sub { font-size: 13.5px; color: var(--text-2); line-height: 1.55; margin-bottom: 24px; }
+    .modal-close {
+      width: 100%; padding: 10px;
+      background: var(--bg-3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: var(--font); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .modal-close:hover { background: var(--border); }
+
+    /* ─── Footer ─── */
+    .app-footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .footer-copy { font-size: 12px; color: var(--text-3); }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a {
+      font-size: 12px; color: var(--text-3); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-2); }
+
+    @media (max-width: 500px) {
+      .page-body { padding: 28px 12px 48px; }
+      .page-title { font-size: 22px; }
+      .app-header { padding: 0 14px; }
+      .header-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Success Modal ─── -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-box">
+      <div class="modal-check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="modal-title">You're on the list</div>
+      <div class="modal-sub">Thanks for applying. We'll reach out with access details as we open up spots on Monad Mainnet.</div>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+
+  <!-- ─── Notification Banner ─── -->
+  <div class="notif-banner" id="notifBanner">
+    <span class="notif-icon">🌀</span>
+    Whitelist is now open · Gated launch on Monad Mainnet
+    <button class="notif-close" onclick="document.getElementById('notifBanner').style.display='none'">✕</button>
+  </div>
+
+  <!-- ─── Header ─── -->
+  <header class="app-header">
+    <a href="/" class="app-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 11h14c9.389 0 17 7.611 17 17s-7.611 17-17 17H16V11z" fill="white"/>
+          <path d="M28 28L16 11v34l12-17z" fill="#1e3a5f"/>
+        </svg>
+      </div>
+      <span class="logo-name">Drake</span>
+    </a>
+    <nav class="header-links">
+      <a href="#" class="header-link">Trade</a>
+      <a href="#" class="header-link">Earn</a>
+      <a href="#" class="header-link">Portfolio</a>
+      <a href="#" class="header-link">Leaderboard</a>
+    </nav>
+    <button class="header-cta">Connect Wallet</button>
+  </header>
+
+  <!-- ─── Page Body ─── -->
+  <div class="page-body">
+
+    <div class="page-eyebrow">
+      <span class="eyebrow-badge">
+        <span class="eyebrow-dot"></span>
+        Gated Launch · Monad Mainnet
+      </span>
+    </div>
+
+    <h1 class="page-title">Request Access</h1>
+    <p class="page-sub">The People's Perp DEX. High speed, fully onchain. Access is gated during our initial launch phase.</p>
+
+    <!-- ─── Form Card ─── -->
+    <div class="form-card">
+
+      <!-- Tab nav -->
+      <div class="tab-nav">
+        <button class="tab-btn active" id="tabBtn0" onclick="goTab(0)">
+          <span class="tab-step" id="step0">1</span>Access
+        </button>
+        <button class="tab-btn" id="tabBtn1" onclick="goTab(1)">
+          <span class="tab-step" id="step1">2</span>Confirm
+        </button>
+      </div>
+
+      <!-- TAB 0: ACCESS -->
+      <div class="tab-panel active" id="tab0">
+
+        <div class="section-label">Connect accounts</div>
+
+        <div class="field">
+          <label class="field-label">Wallet <span class="opt">Required</span></label>
+          <button type="button" class="connect-btn" id="walletBtn" onclick="doConnect('wallet')">
+            <span class="cb-left">
+              <span class="cb-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M1 6h12" stroke="currentColor" stroke-width="1.3"/>
+                  <circle cx="10" cy="8.5" r="1" fill="currentColor"/>
+                  <path d="M4 3V2.5A2.5 2.5 0 019 2.5V3" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              </span>
+              <span>
+                <div class="cb-label" id="walletLabel">Connect Wallet</div>
+                <div class="cb-sub" id="walletSub">MetaMask, WalletConnect &amp; more</div>
+              </span>
+            </span>
+            <span class="cb-badge" id="walletBadge">Connect</span>
+          </button>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Twitter / X <span class="opt">Optional · Recommended</span></label>
+          <button type="button" class="connect-btn" id="twitterBtn" onclick="doConnect('twitter')">
+            <span class="cb-left">
+              <span class="cb-icon">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M0 0l5.5 7M0 13L7.5 0H13L7.5 7M5.5 7L0 13M5.5 7L13 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span>
+                <div class="cb-label" id="twitterLabel">Connect Twitter</div>
+                <div class="cb-sub" id="twitterSub">Verify your @handle</div>
+              </span>
+            </span>
+            <span class="cb-badge" id="twitterBadge">Connect</span>
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-label">Additional info</div>
+
+        <div class="field">
+          <label class="field-label">Other handles <span class="opt">Optional</span></label>
+          <input type="text" class="field-input" name="handles" placeholder="Discord / Telegram / Farcaster @handle" oninput="tick()" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Email <span class="opt">Optional</span></label>
+          <input type="email" class="field-input" name="email" placeholder="Notify me when access opens" oninput="tick()" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Access code <span class="opt">Optional</span></label>
+          <input type="text" class="field-input" name="code" placeholder="Referral or access code" oninput="tick()" />
+        </div>
+
+      </div>
+
+      <!-- TAB 1: CONFIRM -->
+      <div class="tab-panel" id="tab1">
+
+        <div class="confirm-info">
+          <span class="confirm-info-icon">ℹ️</span>
+          <p>Access is reviewed manually. <strong>Connecting your wallet is required.</strong> Adding your Twitter improves your chances. We'll notify you when your spot is ready.</p>
+        </div>
+
+        <div class="section-label">One more thing</div>
+
+        <div class="field">
+          <label class="field-label">Nominate someone for access <span class="opt">Optional</span></label>
+          <input type="text" class="field-input" name="referral" placeholder="@twitter handle" oninput="tick()" />
+          <div class="field-hint">Know someone who should be on Drake? Add their handle.</div>
+        </div>
+
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-wrap" style="margin-top:16px;">
+        <div class="progress-row">
+          <span class="progress-label" id="progressLabel">Getting started</span>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <!-- Form nav -->
+      <div class="form-nav">
+        <span class="nav-meta" id="navMeta">Step 1 of 2</span>
+        <div class="nav-btns">
+          <button class="nav-back" id="backBtn" onclick="prevTab()" style="display:none;">Back</button>
+          <button class="nav-next" id="nextBtn" onclick="nextTab()">Continue →</button>
+          <button class="nav-next" id="submitBtn" style="display:none;background:var(--green);" onclick="handleSubmit()">
+            Request Access →
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <!-- /form-card -->
+
+  </div>
+  <!-- /page-body -->
+
+  <!-- ─── Footer ─── -->
+  <footer class="app-footer">
+    <span class="footer-copy">© Drake Exchange 2026</span>
+    <nav class="footer-links">
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="https://docs.drake.exchange/">Docs</a>
+      <a href="#">Discord</a>
+      <a href="https://x.com/DrakeExchange">Twitter</a>
+    </nav>
+  </footer>
+
+<script type="module">
+  import { createPrivyClient } from 'https://esm.sh/@privy-io/js-sdk-core';
+
+  // ─── CONFIG — fill in both values before deploying ──────────────
+  const PRIVY_APP_ID   = 'cmfnf8e0g01dbjp0bkoqmyuhx';
+  const AIRTABLE_PAT   = 'patDrYPVL9bpqr0zc.ef507655bbec1a7b0f0594b55de2b973e5fe2e0f482170fd8df1bd24c7ce16d6';     // ← Personal Access Token
+  const AIRTABLE_BASE  = 'appZhD6gB3cs1Ljmt/tblzmejpaAd3Bu81W/viwpiunFNNTs9EONU'; // ← starts with "app..."
+  const AIRTABLE_TABLE = 'Whitelist';
+  // ────────────────────────────────────────────────────────────────
+
+  // Initialise Privy client
+  const privy = createPrivyClient({ appId: PRIVY_APP_ID });
+  await privy.init();
+
+  // Restore connected state if user already authenticated (e.g. page refresh)
+  if (privy.user) syncFromUser(privy.user);
+
+  // ─── Tab state ───────────────────────────────────────────────────
+  let currentTab = 0;
+
+  // ─── Privy: connect wallet ────────────────────────────────────────
+  // Called by the Wallet button. Opens Privy's wallet selector modal.
+  async function doConnect(which) {
+    const btnId = which === 'wallet' ? 'walletBtn' : 'twitterBtn';
+    const btn   = document.getElementById(btnId);
+    btn.disabled = true;
+    setBadge(btnId, 'Connecting…');
+
+    try {
+      if (which === 'wallet') {
+        // Opens Privy's wallet modal (MetaMask, WalletConnect, Coinbase, etc.)
+        await privy.connectWallet();
+      } else {
+        // If not yet authenticated at all, run a full login first
+        if (!privy.user) await privy.login();
+        // Then link Twitter/X via OAuth popup
+        await privy.linkOAuth({ provider: 'twitter' });
+      }
+      syncFromUser(privy.user);
+    } catch (err) {
+      console.error('Privy error:', err.message);
+      btn.disabled = false;
+      setBadge(btnId, 'Connect');
+    }
+  }
+
+  // Pull wallet + Twitter data from the Privy user object and update the UI
+  function syncFromUser(user) {
+    if (!user) return;
+    const accounts = user.linkedAccounts || [];
+
+    const wallet  = accounts.find(a => a.type === 'wallet');
+    const twitter = accounts.find(a => a.type === 'twitter_oauth');
+
+    if (wallet)  markConnected('wallet',  shorten(wallet.address));
+    if (twitter) markConnected('twitter', '@' + twitter.username);
+  }
+
+  function markConnected(which, label) {
+    const btnId = which === 'wallet' ? 'walletBtn' : 'twitterBtn';
+    const btn = document.getElementById(btnId);
+    btn.classList.add('connected');
+    btn.disabled = false;
+    document.getElementById(which === 'wallet' ? 'walletLabel'  : 'twitterLabel').textContent = label;
+    document.getElementById(which === 'wallet' ? 'walletSub'    : 'twitterSub').textContent   = which === 'wallet' ? 'Wallet connected' : 'Account verified';
+    document.getElementById(which === 'wallet' ? 'walletBadge'  : 'twitterBadge').textContent = '✓ Connected';
+    tick();
+  }
+
+  function setBadge(btnId, text) {
+    const badgeId = btnId === 'walletBtn' ? 'walletBadge' : 'twitterBadge';
+    document.getElementById(badgeId).textContent = text;
+  }
+
+  function shorten(addr) {
+    return addr ? addr.slice(0, 6) + '…' + addr.slice(-4) : '';
+  }
+
+  // ─── Tab navigation ──────────────────────────────────────────────
+  function goTab(n) {
+    document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i === n));
+    document.querySelectorAll('.tab-btn').forEach((b,i)   => b.classList.toggle('active', i === n));
+    currentTab = n;
+    syncNav();
+    tick();
+  }
+  function nextTab() { if (currentTab < 1) goTab(currentTab + 1); }
+  function prevTab() { if (currentTab > 0) goTab(currentTab - 1); }
+
+  function syncNav() {
+    const isLast = currentTab === 1;
+    document.getElementById('backBtn').style.display   = currentTab === 0 ? 'none' : '';
+    document.getElementById('nextBtn').style.display   = isLast ? 'none' : '';
+    document.getElementById('submitBtn').style.display = isLast ? ''     : 'none';
+    document.getElementById('navMeta').textContent     = `Step ${currentTab + 1} of 2`;
+
+    const step0   = document.getElementById('step0');
+    const tabBtn0 = document.getElementById('tabBtn0');
+    if (currentTab === 1) { step0.textContent = '';  tabBtn0.classList.add('done');    }
+    else                  { step0.textContent = '1'; tabBtn0.classList.remove('done'); }
+  }
+
+  // ─── Progress bar ────────────────────────────────────────────────
+  function tick() {
+    const walletOk  = document.getElementById('walletBtn').classList.contains('connected');
+    const twitterOk = document.getElementById('twitterBtn').classList.contains('connected');
+    const email     = document.querySelector('input[name="email"]').value.trim().length > 0;
+    const referral  = document.querySelector('input[name="referral"]').value.trim().length > 0;
+
+    let score = 0;
+    if (walletOk)  score += 50;
+    if (twitterOk) score += 25;
+    if (email)     score += 15;
+    if (referral)  score += 10;
+    score = Math.min(score, 100);
+
+    document.getElementById('progressFill').style.width = score + '%';
+    document.getElementById('progressPct').textContent  = score + '%';
+
+    const lbl = document.getElementById('progressLabel');
+    if      (score === 0)  lbl.textContent = 'Getting started';
+    else if (score < 40)   lbl.textContent = 'Connecting accounts…';
+    else if (score < 75)   lbl.textContent = 'Profile building…';
+    else if (score < 100)  lbl.textContent = 'Almost complete';
+    else                   lbl.textContent = 'Ready to submit';
+  }
+
+  // ─── Submit → Airtable ───────────────────────────────────────────
+  async function handleSubmit() {
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Submitting…';
+    btn.disabled    = true;
+
+    try {
+      const user    = privy.user;
+      const accounts = user?.linkedAccounts || [];
+      const wallet  = accounts.find(a => a.type === 'wallet');
+      const twitter = accounts.find(a => a.type === 'twitter_oauth');
+
+      // Build the Airtable row — field names must match your table exactly
+      const fields = {
+        'Wallet Address':       wallet?.address                              || '',
+        'Privy User ID':        user?.id                                     || '',
+        'Twitter Handle':       twitter?.username ? '@' + twitter.username  : '',
+        'Twitter Display Name': twitter?.name                                || '',
+        'Other Handles':        document.querySelector('input[name="handles"]').value.trim(),
+        'Email':                document.querySelector('input[name="email"]').value.trim(),
+        'Access Code':          document.querySelector('input[name="code"]').value.trim(),
+        'Referral':             document.querySelector('input[name="referral"]').value.trim(),
+        'Submitted At':         new Date().toISOString(),
+      };
+
+      const res = await fetch(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE}/${encodeURIComponent(AIRTABLE_TABLE)}`,
+        {
+          method:  'POST',
+          headers: {
+            'Authorization': `Bearer ${AIRTABLE_PAT}`,
+            'Content-Type':  'application/json',
+          },
+          body: JSON.stringify({ fields }),
+        }
+      );
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody?.error?.message || `Airtable ${res.status}`);
+      }
+
+      // Success — show modal
+      document.getElementById('modal').classList.add('open');
+
+    } catch (err) {
+      console.error('Submit error:', err.message);
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled    = false;
+    }
+  }
+
+  // ─── Expose to window (required because onclick="" runs in global scope) ──
+  window.doConnect    = doConnect;
+  window.goTab        = goTab;
+  window.nextTab      = nextTab;
+  window.prevTab      = prevTab;
+  window.handleSubmit = handleSubmit;
+  window.tick         = tick;
+
+  // ─── Init ────────────────────────────────────────────────────────
+  syncNav();
+  tick();
+</script>
+</body>
+</html>
