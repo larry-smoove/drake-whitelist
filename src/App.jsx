@@ -347,11 +347,9 @@ export default function App() {
       <footer className="app-footer">
         <span className="footer-copy">© Drake Exchange 2026</span>
         <nav className="footer-links">
-          <a href="#">Terms</a>
-          <a href="#">Privacy</a>
-          <a href="#">Docs</a>
-          <a href="#">Discord</a>
-          <a href="#">Twitter</a>
+          <a href="https://docs.drake.exchange/">Docs</a>
+          <a href="https://discord.gg/Z4m9VjGdQV">Discord</a>
+          <a href="https://x.com/DrakeExchange#">Twitter</a>
         </nav>
       </footer>
     </>
