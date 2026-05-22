@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       'Wallet Address': walletAddress || '',
       'Privy User ID':  privyUserId   || '',
       'Twitter Handle': twitterHandle || '',
-      'Twitter Name':   twitterName   || '',
+      'Twitter Display Name': twitterName || '',
       'Other Handles':  otherHandles  || '',
       'Email':          email         || '',
       'Access Code':    accessCode    || '',
