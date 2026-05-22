@@ -2,9 +2,7 @@ import { usePrivy } from '@privy-io/react-auth';
 import { useState } from 'react';
 import './index.css';
 
-const AIRTABLE_PAT = import.meta.env.VITE_AIRTABLE_API_KEY;
-const AIRTABLE_BASE = import.meta.env.VITE_AIRTABLE_BASE;
-const AIRTABLE_TABLE = import.meta.env.VITE_AIRTABLE_TABLE;
+const SUBMIT_URL = import.meta.env.VITE_SUBMIT_URL;
 
 export default function App() {
   const {
@@ -66,34 +64,36 @@ export default function App() {
     setSubmitting(true);
     setError(null);
 
-    const fields = {
-      'Wallet Address':  wallet?.address       || '',
-      'Privy User ID':   user?.id              || '',
-      'Twitter Handle':  twitter?.username ? '@' + twitter.username : '',
-      'Twitter Name':    twitter?.name         || '',
-      'Other Handles':   handles,
-      'Email':           email,
-      'Access Code':     code,
-      'Referral':        referral,
-      'Submitted At':    new Date().toISOString(),
+    if (!SUBMIT_URL) {
+      setError('Submission endpoint is not configured.');
+      setSubmitting(false);
+      return;
+    }
+
+    const payload = {
+      walletAddress: wallet?.address || '',
+      privyUserId: user?.id || '',
+      twitterHandle: twitter?.username ? '@' + twitter.username : '',
+      twitterName: twitter?.name || '',
+      otherHandles: handles,
+      email,
+      accessCode: code,
+      referral,
+      submittedAt: new Date().toISOString(),
     };
 
     try {
-      const res = await fetch(
-        `https://api.airtable.com/v0/${AIRTABLE_BASE}/${encodeURIComponent(AIRTABLE_TABLE)}`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${AIRTABLE_PAT}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fields }),
-        }
-      );
+      const res = await fetch(SUBMIT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) {
         const e = await res.json().catch(() => ({}));
-        throw new Error(e?.error?.message || `Error ${res.status}`);
+        throw new Error(e?.error || `Error ${res.status}`);
       }
 
       setSubmitted(true);
